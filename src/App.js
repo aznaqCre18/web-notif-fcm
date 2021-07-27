@@ -1,23 +1,58 @@
-import logo from './logo.svg';
-import './App.css';
+
+import { useEffect } from 'react';
+import './App.scss';
+import firebase from './firebase';
+
+const square = [
+  {
+    name: 'A Capella'
+  },
+  {
+    name: 'Felix Siauw'
+  },
+  {
+    name: 'Stuck With You'
+  },
+  {
+    name: 'Dan + Shay'
+  },
+  {
+    name: 'square5'
+  },
+  {
+    name: 'square6'
+  },
+]
 
 function App() {
+
+  useEffect(() => {
+    const messaging = firebase.messaging();
+
+    messaging.requestPermission().then(() => {
+      return messaging.getToken();
+    }).then((token) => {
+      console.log('Token: ', token);
+    }).catch((error) => {
+      console.log(error, 'error');
+    })
+  }, [])
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="wrapper-container">
+        <div className="wrapper-app">
+          {
+            square.map((item, idx) => {
+              return (
+                <div key={idx} className="square">
+                  {item.name}
+                </div>
+              )
+            })
+          }
+        </div>
+      </div>
     </div>
   );
 }
